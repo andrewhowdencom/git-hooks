@@ -1,0 +1,26 @@
+#!/bin/bash
+GIT_LOG="/var/log/git/hooks"
+
+# Formatting Functions
+function printHookStart {
+    echo "*** Start $1 ***"
+}
+
+function printHookEnd {
+   echo "*** End $1 ***"
+}
+
+# Work Duplication Functions
+function pushToGitHub {
+    printHookStart $FUNCNAME
+   
+    # Determine the working branch
+    WORKING_BRANCH=$(git rev-parse --symbolic --abbrev-ref $1)
+    
+    git push github $WORKING_BRANCH > $GIT_LOG
+    
+    printHookEnd $FUNCNAME
+}
+
+git update-server-info
+pushToGitHub $1
