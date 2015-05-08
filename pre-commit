@@ -1,0 +1,62 @@
+#!/usr/local/env bash
+# Formatting Functions
+function printHookStart {
+      echo "*** Start $1 ***"
+}
+
+function printHookEnd {
+     echo "*** End $1 ***"
+}
+
+php_types=("php" "tml")
+errors_exist=0
+lint=0
+staged_files=$(git diff --name-only --cached HEAD)
+
+
+# http://stackoverflow.com/questions/14366390/bash-if-condition-check-if-element-is-present-in-array
+function array_contains () { 
+    local array="$1[@]"
+    local seeking=$2
+    local in=1
+    for element in "${!array}"; do
+        if [[ $seeking == *"$element"* ]]; then
+            in=0
+            break
+        fi
+    done
+    return $in
+}
+
+for file in $staged_files;
+  do
+    # php -l
+    array_contains php_types ${file: -5} 
+    if [[ $? -eq 0 ]]; then  
+        php -l $file;
+       
+        if [[ $? -ne 0 ]]; then
+            errors_exist=1
+        fi
+    fi
+done
+
+# Discontinue process for critical errors
+if [[ $errors_exist -ne 0 ]]; then 
+  exit $errors_exist; 
+fi
+
+for file in $staged_files; 
+  do
+    # phpcs
+    array_contains php_types ${file: -5}
+    if [[ $? -eq 0 ]]; then 
+      phpcs --standard=HowdenioMagento $file
+     
+      success=$? 
+      if [[ $success -ne 0 ]]; then  
+        lint=$success
+     fi
+   fi
+done
+
