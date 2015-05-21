@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Declare Variables
+draft_path=".git/DRAFT_COMMIT_EDITMSG"
+rm "$draft_path" 
+
+# Check whether "RFNO" string still exists (hasn't been checked)
+if [[ ! -z "$(grep 'RFNO' "$1")" ]]; then 
+    cp ".git/COMMIT_EDITMSG" "$draft_path"
+    echo >&2 "RFNO Present: You've not refactored your commit message. Aborting Commit."
+    exit 1
+fi
+
+if [[ ! -z "$(grep "^[^#]" "$1"  | head -n 1 | grep -i fix)" ]]; then
+    cp ".git/COMMIT_EDITMSG" "$draft_path"
+    echo >&2 "Found \"Fix\" in the commit msg head. Aborting Commit."
+    exit 1
+fi 

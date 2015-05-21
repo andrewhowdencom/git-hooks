@@ -1,4 +1,4 @@
-#!/usr/local/env bash
+#!/usr/bin/env bash
 # Formatting Functions
 function printHookStart {
       echo "*** Start $1 ***"
@@ -7,6 +7,8 @@ function printHookStart {
 function printHookEnd {
      echo "*** End $1 ***"
 }
+
+printHookStart $0
 
 php_types=("php" "tml")
 errors_exist=0
@@ -46,17 +48,25 @@ if [[ $errors_exist -ne 0 ]]; then
   exit $errors_exist; 
 fi
 
-for file in $staged_files; 
-  do
-    # phpcs
-    array_contains php_types ${file: -5}
-    if [[ $? -eq 0 ]]; then 
-      phpcs --standard=HowdenioMagento $file
+if [[ $ENV_PHPCS_STRICT -ne "" ]]; then 
+  for file in $staged_files; 
+    do
+      # phpcs
+      array_contains php_types ${file: -5}
+        if [[ $? -eq 0 ]]; then 
+        phpcs --standard=HowdenioMagento $file
      
-      success=$? 
-      if [[ $success -ne 0 ]]; then  
-        lint=$success
-     fi
-   fi
-done
+          success=$? 
+          if [[ $success -ne 0 ]]; then  
+            lint=$success
+          fi
+       fi
+    done
+else 
+  PATCH_FILE=$(git format-patch -n -1)
+  cat "$PATCH_FILE" | grep --perl-regex '^\+[^\+]' | cut -c 2- > changes.php && phpcs --standard=HowdenioMagento changes.php && rm changes.php
+  rm $PATCH_FILE
+fi
+
+printHookEnd $0
 
