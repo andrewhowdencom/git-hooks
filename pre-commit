@@ -32,6 +32,11 @@ function array_contains () {
 
 for file in $staged_files;
   do
+    if [[ ! -f "$file" ]]; then 
+      echo "Skipping $file: It's been deleted"
+      continue;
+    fi  
+
     # php -l
     array_contains php_types ${file: -5} 
     if [[ $? -eq 0 ]]; then  
@@ -51,6 +56,11 @@ fi
 if [[ $ENV_PHPCS_STRICT -ne "" ]]; then 
   for file in $staged_files; 
     do
+      if [[ ! -f "$file" ]]; then 
+        echo "Skipping $file: It's been deleted"
+        continue;
+      fi
+
       # phpcs
       array_contains php_types ${file: -5}
         if [[ $? -eq 0 ]]; then 
