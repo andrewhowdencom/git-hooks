@@ -1,11 +1,17 @@
 #!/bin/bash
 
+function loudError() {
+   echo >&2 "------------- START WARNING ---------------"
+   echo >&2 "$1"
+   echo >&2 "-------------- END WARNING ----------------"
+}
+
 # Declare Variables
 draft_path=".git/DRAFT_COMMIT_EDITMSG"
 rm "$draft_path" 
 
 # Define a series of "bad words" -- Words that are redundant, or not descriptive enough
-bad_words=(update updated fix fixed fixing)
+bad_words=(update updated fix fixed fixing alter altered refactor refactored)
 commit_msg=$(grep "^[^#]" "$1"  | head -n 1);
 
 # Check whether "RFNO" string still exists (hasn't been checked)
@@ -19,7 +25,7 @@ for bad_word in ${bad_words[*]};
 do
     if [[ ! -z "$(grep -i "$bad_word\s" <<< $commit_msg)" ]]; then
         cp ".git/COMMIT_EDITMSG" "$draft_path"
-        echo >&2 "Found \"$bad_word\" in the commit msg head. Aborting Commit."
+        loudError "Found \"$bad_word\" in the commit msg head. Aborting Commit."
         exit 1
     fi
 done 
