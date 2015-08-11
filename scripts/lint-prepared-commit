@@ -10,8 +10,21 @@ function loudError() {
 draft_path=".git/DRAFT_COMMIT_EDITMSG"
 rm "$draft_path" 
 
-# Define a series of "bad words" -- Words that are redundant, or not descriptive enough
-bad_words=(update updated fix fixed fixing alter altered refactor refactored)
+# Define a series of "bad words" -- Words that are redundant, not descriptive enough or not the canonical reference
+bad_words=( \
+correct \
+improve improved \
+update updated \
+fix \
+mobile iPhone iphone\
+tablet ipad \
+fixed fixing \
+alter altered \
+refactor refactored \
+resolve resolved \ 
+update updated \
+)
+
 commit_msg=$(grep "^[^#]" "$1"  | head -n 1);
 
 # Check whether "RFNO" string still exists (hasn't been checked)

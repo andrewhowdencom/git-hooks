@@ -11,6 +11,7 @@ function printHookEnd {
 printHookStart $0
 
 php_types=("php" "tml")
+xml_types=("xml")
 errors_exist=0
 lint=0
 staged_files=$(git diff --name-only --cached HEAD)
@@ -42,6 +43,15 @@ for file in $staged_files;
     if [[ $? -eq 0 ]]; then
         php -l $file;
 
+        if [[ $? -ne 0 ]]; then
+            errors_exist=1
+        fi
+    fi
+
+    array_contains xml_types ${file: -3}
+    if [[ $? -eq 0 ]]; then 
+        xmllint --noout $file;
+        
         if [[ $? -ne 0 ]]; then
             errors_exist=1
         fi
