@@ -12,6 +12,7 @@ printHookStart $0
 
 php_types=("php" "tml")
 xml_types=("xml")
+scss_types=("scss")
 errors_exist=0
 lint=0
 staged_files=$(git diff --name-only --cached HEAD)
@@ -56,6 +57,15 @@ for file in $staged_files;
             errors_exist=1
         fi
     fi
+
+    array_contains scss_types ${file: -4}
+    if [[ $? -eq 0 ]]; then 
+       scss-lint $file;
+
+       if [[ $? == 2 ]]; then
+            errors_exist=1
+       fi
+   fi 
 done
 
 # Discontinue process for critical errors
