@@ -17,6 +17,9 @@ errors_exist=0
 lint=0
 staged_files=$(git diff --name-only --cached HEAD)
 
+# Correctly formmatted variables
+COMMIT_BLOCKING_TEXT=("block_commit" "console.log" "debug.log")
+
 
 # http://stackoverflow.com/questions/14366390/bash-if-condition-check-if-element-is-present-in-array
 function array_contains () { 
@@ -38,6 +41,14 @@ for file in $staged_files;
       echo "Skipping $file: It's been deleted"
       continue;
     fi  
+     
+    # Commit blocking comments / todo's
+    GREP_ARG=$(echo ${COMMIT_BLOCKING_TEXT[@]} | tr " " "|")
+    grep -Eowi "$GREP_ARG" ${file}
+    if [[ $? -eq 0 ]]; then 
+       # Grep returns a success if it finds something, which we DONT want.
+       errors_exist=1
+    fi
 
     # php -l
     array_contains php_types ${file: -5}
@@ -48,7 +59,8 @@ for file in $staged_files;
             errors_exist=1
         fi
     fi
-
+    
+    # xmllint
     array_contains xml_types ${file: -3}
     if [[ $? -eq 0 ]]; then 
         xmllint --noout $file;
@@ -58,6 +70,7 @@ for file in $staged_files;
         fi
     fi
 
+    # scss-lint
     array_contains scss_types ${file: -4}
     if [[ $? -eq 0 ]]; then 
        scss-lint $file;
