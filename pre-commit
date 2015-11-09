@@ -20,6 +20,11 @@ staged_files=$(git diff --name-only --cached HEAD)
 # Correctly formmatted variables
 COMMIT_BLOCKING_TEXT=("block_commit" "console.log" "debug.log")
 
+JS_SUFFIXES=("js")
+
+TEXT_RED='\033[0;31m'
+TEXT_ORANGE='\033[0;33m'
+TEXT_NC='\033[0m'
 
 # http://stackoverflow.com/questions/14366390/bash-if-condition-check-if-element-is-present-in-array
 function array_contains () { 
@@ -44,8 +49,9 @@ for file in $staged_files;
      
     # Commit blocking comments / todo's
     GREP_ARG=$(echo ${COMMIT_BLOCKING_TEXT[@]} | tr " " "|")
-    grep -Eowi "$GREP_ARG" ${file}
+    grep -Eowi "$GREP_ARG" ${file} > /dev/null
     if [[ $? -eq 0 ]]; then 
+       echo "$GREP_ARG found in ${file}";
        # Grep returns a success if it finds something, which we DONT want.
        errors_exist=1
     fi
@@ -76,13 +82,28 @@ for file in $staged_files;
        scss-lint $file;
 
        if [[ $? == 2 ]]; then
-            errors_exist=1
+          errors_exist=1
        fi
-   fi 
+   fi
+   
+   array_contains JS_SUFFIXES ${file: -2}
+   if [[ $? -eq 0 ]]; then 
+      eslint $file;
+   
+      if [[ $? -ne 0 ]]; then
+          errors_exist=1
+      fi
+   fi
 done
 
 # Discontinue process for critical errors
 if [[ $errors_exist -ne 0 ]]; then
+  echo -e "${TEXT_RED}
+  ----------------------------- STOP -----------------------------
+  Something is hella wrong here; You failed the lints. You need to 
+  fix that up before I'm a let you commit! 
+  ----------------------------- STOP -----------------------------
+  ${TEXT_NC}"
   exit $errors_exist;
 fi
 
