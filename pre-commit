@@ -24,7 +24,9 @@ JS_SUFFIXES=("js")
 
 TEXT_RED='\033[0;31m'
 TEXT_ORANGE='\033[0;33m'
+TEXT_YELLOW='\033[0;33m'
 TEXT_NC='\033[0m'
+
 
 # http://stackoverflow.com/questions/14366390/bash-if-condition-check-if-element-is-present-in-array
 function array_contains () { 
@@ -59,11 +61,19 @@ for file in $staged_files;
     # php -l
     array_contains php_types ${file: -5}
     if [[ $? -eq 0 ]]; then
-        php -l $file;
+      for PHP_BINARY in php php5-6cli php7cli; 
+          do
+            # Get the result of the PHP Linter
+            RES=$("$PHP_BINARY" -l $file)
+            
+            # Check if the file is valid
+            if [[ $? -ne 0 ]]; then
+                errors_exist=1 
+            fi
 
-        if [[ $? -ne 0 ]]; then
-            errors_exist=1
-        fi
+            # Print the result to the user, per PHP Version
+            echo -e "${TEXT_YELLOW} $PHP_BINARY ${TEXT_NC}: $RES"
+        done
     fi
     
     # xmllint
