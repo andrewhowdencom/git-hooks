@@ -18,7 +18,7 @@ lint=0
 staged_files=$(git diff --name-only --cached HEAD)
 
 # Correctly formmatted variables
-COMMIT_BLOCKING_TEXT=("block_commit" "console.log" "debug.log")
+COMMIT_BLOCKING_TEXT=("tmp" "block_commit" "console.log" "debug.log")
 
 JS_SUFFIXES=("js")
 
