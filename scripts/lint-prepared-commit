@@ -42,3 +42,12 @@ do
         exit 1
     fi
 done 
+
+# Check for spelling errors
+SPELLING_ERRORS="$(cat $1 | aspell --list)"
+if [[ ! -z $SPELLING_ERRORS ]]; then
+    echo >&2 "---------- SPELLING ERRORS ------------"
+    echo >&2 "The following words appear to have been misspelled:"
+    echo >&2 "$SPELLING_ERRORS"
+    echo >&2 "---------- SPELLING ERRORS ------------"
+fi

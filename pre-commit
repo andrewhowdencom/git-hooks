@@ -13,12 +13,15 @@ printHookStart $0
 php_types=("php" "tml")
 xml_types=("xml")
 scss_types=("scss")
+json_types=("json")
 errors_exist=0
 lint=0
 staged_files=$(git diff --name-only --cached HEAD)
 
+# NEED TO PUT JSON LINTING HEREEE
+
 # Correctly formmatted variables
-COMMIT_BLOCKING_TEXT=("tmp" "block_commit" "console.log" "debug.log")
+COMMIT_BLOCKING_TEXT=("block_commit" "console.log" "debug.log")
 
 JS_SUFFIXES=("js")
 
