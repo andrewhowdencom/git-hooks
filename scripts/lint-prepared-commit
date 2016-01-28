@@ -53,9 +53,9 @@ if [[ ! -z $SPELLING_ERRORS ]]; then
 fi
 
 # Check the line length
-if [[ ${#COMMIT_MSG} > 100 ]]; then
+if (( ${#COMMIT_MSG} > 100 )); then
     loudError "Commit heading line length above 100 chars -- Shorten it"
     exit 1
-elif [[ ${#COMMIT_MSG} > 70 ]]; then
+  elif (( ${#COMMIT_MSG} > 70 )); then
     loudError "Commit message line length above 72 characters -- You should amend it"
 fi
