@@ -30,6 +30,10 @@ TEXT_ORANGE='\033[0;33m'
 TEXT_YELLOW='\033[0;33m'
 TEXT_NC='\033[0m'
 
+if [[ ! -z $SKIP_ALL_LINTS ]]; then
+  echo "Bro! I'm skipping all the lints. This feels like a bad idea, but you said as much"
+  exit 0
+fi
 
 # http://stackoverflow.com/questions/14366390/bash-if-condition-check-if-element-is-present-in-array
 function array_contains () { 
