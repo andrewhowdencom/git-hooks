@@ -1,0 +1,52 @@
+#!/bin/bash
+
+EXIT_CODE_ABORT=1
+LINT_FAILURE=0
+FILES=$(git diff --name-only --staged)
+
+if [[ -n ${SKIP_LINTS} ]]; then
+echo -e '\e[0;31m' # Red
+cat <<"EOF"
+                            ,-.
+       ___,---.__          /'|`\          __,---,___
+    ,-'    \`    `-.____,-'  |  `-.____,-'    //    `-.
+  ,'        |           ~'\     /`~           |        `.
+ /      ___//              `. ,'          ,  , \___      \
+|    ,-'   `-.__   _         |        ,    __,-'   `-.    |
+|   /          /\_  `   .    |    ,      _/\          \   |
+\  |           \ \`-.___ \   |   / ___,-'/ /           |  /
+ \  \           | `._   `\\  |  //'   _,' |           /  /
+  `-.\         /'  _ `---'' , . ``---' _  `\         /,-'
+     ``       /     \    ,='/ \`=.    /     \       ''
+             |__   /|\_,--.,-.--,--._/|\   __|
+             /  `./  \\`\ |  |  | /,//' \,'  \
+            /   /     ||--+--|--+-/-|     \   \     YOU SKIPPED LINTS. I SAW THAT.
+           |   |     /'\_\_\ | /_/_/`\     |   |    GONNA GO EAT A PUPPY.
+            \   \__, \_     `~'     _/ .__/   /
+             `-._,-'   `-._______,-'   `-._,-'
+EOF
+echo -e "\e[0m" # Off
+    sleep 5
+    exit 0
+fi
+
+for FILE in ${FILES}; do
+   echo "Linting ${FILE}"
+
+   stat "${FILE}" 2>&1 > /dev/null
+   if [[ $? != 0 ]]; then
+       echo "Cant' stat file. Skipping!"
+     else 
+
+   arc lint "${FILE}"
+
+   if [[ $? != 0 ]]; then
+       LINT_FAILURE=1
+   fi
+    fi
+
+done
+
+if [[ ${LINT_FAILURE} == 1 ]]; then
+  exit ${EXIT_CODE_ABORT}
+fi
