@@ -1,0 +1,12 @@
+
+# Format:
+#   TICKET_ID (epic) type (scope): subject
+#
+#   {body} 
+#
+#   BREAKING CHANGE:
+#   BREAKING CHANGE:
+# 
+# "type" can be one of
+#   feat, fix, docs, style, refactor, test, chore
+#
