@@ -1,12 +1,17 @@
 #!/bin/bash
 
 show_error() {
-    echo -e '\e[0;33m' # Yellow
-    echo '-------------------------------- WARNING -------------------------------'
-    echo 'You have not signed your commit! Please do so now, as this allow us to'
-    echo 'verify that it is "you" writing the code.'
-    echo '------------------------------ END WARNING -----------------------------'
-    echo -e '\e[0m'
+    # http://stackoverflow.com/questions/3601515/how-to-check-if-a-variable-is-set-in-bash
+    if [[ -z ${SKIP_CODE_SIGNING+x} ]]; then
+        echo -e '\e[0;33m' # Yellow
+        echo '-------------------------------- WARNING -------------------------------'
+        echo 'You have not signed your commit! Please do so now, as this allow us to'
+        echo 'verify that it is "you" writing the code.'
+        echo '------------------------------ END WARNING -----------------------------'
+        echo -e '\e[0m'
+    else
+        echo -e '\e[0;32m Looks like you are skipping code signing. Well, OK then. \e[0m'
+    fi
 }
 
 git verify-commit HEAD || show_error
