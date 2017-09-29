@@ -10,3 +10,7 @@
 # "type" can be one of
 #   feat, fix, docs, style, refactor, test, chore
 #
+# Terminology:
+#   Project Owner: Client,
+#   Administrator: Admin,
+#   Customer:      Website customer, users.
