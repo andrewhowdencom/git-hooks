@@ -1,27 +1,32 @@
+__TICKET_ID__ __TYPE__ (__SCOPE__): __SUBJECT__
 
-# Format:
-#   TICKET_ID (epic) type (scope): subject
-#
-#   {general background} 
-#
-#   == Stakeholder Impact ==
-#
-#   === Project Owner ====
-#
-#   === Developers ===
-#
-#   === SEO Agency ===
-#
-#   == Design Notes ==
-#
-#   === {design note title} ===
-#
-#   BREAKING CHANGE:
-#   BREAKING CHANGE:
-# 
 # "type" can be one of
 #   feat, fix, docs, style, refactor, test, chore
-#
+
+__GENERAL_BACKGROUND__
+
+== Stakeholder Impact ==
+# Document the impacts on each group. Largely a self check, to ensure the
+# design of this feature is appropriate.
+
+=== Project Owner ====
+
+__PROJECT_OWNER_STAKEHOLDER_IMPACT__
+
+=== Developers ===
+
+__DEVELOPER_STAKEHOLDER_IMPACT__
+
+=== __OTHER_STAKEHOLDER__ ===
+
+__OTHER_STAKEHOLDER_IMPCAT__
+
+== Design Notes ==
+
+=== __DESIGN_NOTES_TITLE__  ===
+
+BREAKING CHANGE: __BREAKING_CHANGE__
+
 # Terminology:
 #   Project Owner: Client,
 #   Administrator: Admin,
