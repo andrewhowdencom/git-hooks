@@ -2,7 +2,19 @@
 # Format:
 #   TICKET_ID (epic) type (scope): subject
 #
-#   {body} 
+#   {general background} 
+#
+#   == Stakeholder Impact ==
+#
+#   === Project Owner ====
+#
+#   === Developers ===
+#
+#   === SEO Agency ===
+#
+#   == Design Notes ==
+#
+#   === {design note title} ===
 #
 #   BREAKING CHANGE:
 #   BREAKING CHANGE:
