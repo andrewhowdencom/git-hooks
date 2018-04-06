@@ -5,6 +5,9 @@ __TICKET_ID__ __TYPE__ (__SCOPE__): __SUBJECT__
 
 __GENERAL_BACKGROUND__
 
+# Handy Tools:
+# - ASCII Graphs: http://asciiflow.com/
+
 == Stakeholder Impact ==
 # Document the impacts on each group. Largely a self check, to ensure the
 # design of this feature is appropriate.
