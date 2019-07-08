@@ -14,4 +14,14 @@ show_error() {
     fi
 }
 
+list_bugs() {
+        echo '-------------------------------------------------- BUGS REMAIN ------------------------------------------'
+	git bug ls
+        echo '---------------------------------------------------------------------------------------------------------'
+}
+
 git verify-commit HEAD || show_error
+
+which git-bug && \
+  git bug ls | grep '.*' > /dev/null \
+  && list_bugs
